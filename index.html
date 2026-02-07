@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Quad - Your Service Marketplace</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <i class="fas fa-layer-group"></i>
+                <span>The Quad</span>
+            </div>
+            <div class="nav-menu">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#services" class="nav-link">Services</a>
+                <button id="loginBtn" class="btn btn-primary">Login</button>
+                <button id="signupBtn" class="btn btn-secondary">Sign Up</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Connect With The Best Service Providers</h1>
+                <p>Whether you're looking for services or offering them, The Quad is your perfect marketplace</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-large btn-primary" onclick="showSignup()">Get Started</button>
+                    <button class="btn btn-large btn-outline" onclick="showBrowseServices()">Browse Services</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2>How It Works</h2>
+            <div class="features">
+                <div class="feature-card">
+                    <i class="fas fa-user-tie"></i>
+                    <h3>For Service Providers</h3>
+                    <p>Create your business profile, showcase your services, and reach potential customers</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-search"></i>
+                    <h3>For Service Seekers</h3>
+                    <p>Search and discover quality services, read reviews, and connect with providers</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-star"></i>
+                    <h3>Review System</h3>
+                    <p>Rate and review services to help others make informed decisions</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section (Hidden initially) -->
+    <section id="services" class="services-section" style="display: none;">
+        <div class="container">
+            <h2>Available Services</h2>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search for services...">
+                <button class="btn btn-primary" onclick="searchServices()">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </div>
+            <div id="servicesList" class="services-grid"></div>
+        </div>
+    </section>
+
+    <!-- Dashboard (Hidden initially) -->
+    <section id="dashboard" class="dashboard" style="display: none;">
+        <div class="container">
+            <div class="dashboard-header">
+                <h2>Welcome, <span id="userName"></span></h2>
+                <button class="btn btn-secondary" onclick="logout()">Logout</button>
+            </div>
+            
+            <!-- Service Renderer Dashboard -->
+            <div id="rendererDashboard" style="display: none;">
+                <div class="dashboard-content">
+                    <div class="profile-section">
+                        <h3>Your Business Profile</h3>
+                        <div id="businessProfile"></div>
+                        <button class="btn btn-primary" onclick="showEditProfile()">Edit Profile</button>
+                    </div>
+                    <div class="posts-section">
+                        <h3>Your Advertisements</h3>
+                        <button class="btn btn-primary" onclick="showAddPost()">+ New Advertisement</button>
+                        <div id="userPosts" class="posts-grid"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service User Dashboard -->
+            <div id="userDashboard" style="display: none;">
+                <div class="dashboard-content">
+                    <h3>Browse Services</h3>
+                    <div class="search-bar">
+                        <input type="text" id="dashboardSearch" placeholder="Search for services...">
+                        <button class="btn btn-primary" onclick="searchServices()">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                    </div>
+                    <div id="dashboardServicesList" class="services-grid"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h2>Login</h2>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Login</button>
+            </form>
+            <p class="modal-footer">Don't have an account? <a href="#" onclick="switchToSignup()">Sign up</a></p>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('signupModal')">&times;</span>
+            <h2>Sign Up</h2>
+            <form id="signupForm" onsubmit="handleSignup(event)">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="signupName" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="signupEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="signupPassword" required>
+                </div>
+                <div class="form-group">
+                    <label>Account Type</label>
+                    <select id="accountType" required>
+                        <option value="">Select account type</option>
+                        <option value="renderer">Service Provider</option>
+                        <option value="user">Service Seeker</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+            </form>
+            <p class="modal-footer">Already have an account? <a href="#" onclick="switchToLogin()">Login</a></p>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div id="editProfileModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('editProfileModal')">&times;</span>
+            <h2>Edit Business Profile</h2>
+            <form id="editProfileForm" onsubmit="handleEditProfile(event)">
+                <div class="form-group">
+                    <label>Business Name</label>
+                    <input type="text" id="businessName" required>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="businessCategory" required>
+                        <option value="">Select category</option>
+                        <option value="Home Services">Home Services</option>
+                        <option value="Professional Services">Professional Services</option>
+                        <option value="Health & Wellness">Health & Wellness</option>
+                        <option value="Education">Education</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Bio</label>
+                    <textarea id="businessBio" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Contact Phone</label>
+                    <input type="tel" id="businessPhone" required>
+                </div>
+                <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" id="businessLocation" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Save Profile</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Post Modal -->
+    <div id="addPostModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addPostModal')">&times;</span>
+            <h2>New Advertisement</h2>
+            <form id="addPostForm" onsubmit="handleAddPost(event)">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" id="postTitle" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="postDescription" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Price (Optional)</label>
+                    <input type="text" id="postPrice" placeholder="e.g., $50/hour">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Post Advertisement</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Service Detail Modal -->
+    <div id="serviceDetailModal" class="modal">
+        <div class="modal-content modal-large">
+            <span class="close" onclick="closeModal('serviceDetailModal')">&times;</span>
+            <div id="serviceDetailContent"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
